@@ -12,7 +12,7 @@ import pandas as pd
 import os
 
 
-def StrainGraph(data: pd.DataFrame, test_num: np.int8, sensor: np.array, save: bool):
+def StrainGraph(data: pd.DataFrame, test_num: np.int8, sensor: np.array, modulus : np.float64, save: bool):
     '''
     PLots the strain graphs.
 
@@ -24,29 +24,40 @@ def StrainGraph(data: pd.DataFrame, test_num: np.int8, sensor: np.array, save: b
         sample number
     sensor : np.array
         which sensors a plot must be made for
+    modulus : np.float64
+        elastic modulus of that material
     save : bool
         save graphs or not
     '''
-    plot_ind = 600
+    # end_indices = [600, 70, 250, 550, 500]
+    
+    # end_ind = end_indices[test_num-1]
+
+    end_ind = -1
 
     # finding plot limits:
-    max_strain = max(data[['MTS', 'Laser', 'Strain Guage 1', 'Strain Guage 2']][0:plot_ind].max(axis=1))
+    max_strain = max(data[[ 'Laser', 'Strain Guage 1', 'Strain Guage 2']][0:end_ind].max(axis=1))
     max_stress = max(data['MTS_stress'])
 
     for s in sensor:
         print(" Generating " + str(s) + " strain plot..")
-        plt.plot(data[s][0:plot_ind], data.MTS_stress[0:plot_ind], color = 'r')
+        plt.plot(data[s][0:end_ind], data.MTS_stress[0:end_ind], color = 'r')
         params = {'mathtext.default': 'regular' }          
         plt.rcParams.update(params)
         plt.rcParams.update({'font.size': 12})
         plt.title(f'Material #{test_num}: {str(s)}, Stress vs Strain')
         plt.xlabel(str(s) + ' Strain (mm/mm)')
         plt.ylabel('Stress (MPa)')
-        # plt.legend([str(s) + ' Data - Material #' + str(test_num)])
+
+        # x = np.linspace(0, 1, 100)
+        # y = x*modulus
+        # plt.plot(x, y)
+
+        plt.legend([f'Young\'s Modulus = {round(modulus, 2)} MPa)'])
         plt.grid()
         # if s not in ['Strain Guage 1', 'Strain Guage 2']:
-        #     plt.xlim((max_strain*-0.1,max_strain*1.1))
-        #     plt.ylim((max_stress*-0.1,max_stress*1.1))
+        plt.xlim((max_strain*-0.1,max_strain*1.1))
+        plt.ylim((max_stress*-0.1,max_stress*1.1))
         if save:
             os.makedirs(f'results/Test_{test_num}-graphs/', exist_ok=True)
             plt.savefig(f'results/Test_{test_num}-graphs/{s}_strain.png')

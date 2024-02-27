@@ -13,6 +13,7 @@ import pandas as pd
 
 # Custom Functions/libraies
 from graphing import *
+from analysis import *
 
 # DEFINITIONS
 ########################
@@ -41,10 +42,6 @@ for test_num in range(1,6):
     ##############################
     raw_data = pd.read_csv(file_path, skiprows=skip_rows, sep = '\t')
 
-
-    # Rename columns
-    parsed_data = raw_data.rename(columns={'X_Value': 't', 'Untitled': 'MTS_F', 'Untitled 1': 'MTS', 'Untitled 2': 'Laser', 'Untitled 3': 'Strain Guage 1', 'Untitled 4': 'Strain Guage 2', 'Untitled 5': 'MTS_stress'})
-    
   
     # PROCESSING DATA
     ########################
@@ -52,26 +49,22 @@ for test_num in range(1,6):
     print("Beginning Analysis...")
     print("=========================================")
 
-    parsed_data.MTS_stress = parsed_data['MTS_F'] / (sample_dimensions['B' + str(test_num)]['width'] * sample_dimensions['B' + str(test_num)]['thickness'])
-    parsed_data.Laser = ((parsed_data['Laser']-parsed_data['Laser'][0])/parsed_data['Laser'][0])
-    parsed_data.MTS = -((parsed_data['MTS']-parsed_data['MTS'][0])/parsed_data['MTS'][0])
-    parsed_data['Strain Guage 1'] = -1 * parsed_data['Strain Guage 1'][0:800] # filtering out some 'post guage break' 
-    parsed_data['Strain Guage 2'] =      parsed_data['Strain Guage 2'][0:800]
+    parsed_data = StrainProcess(raw_data, test_num, sample_dimensions)
 
-    print(parsed_data[0:500])
-    if test_num == 1:
-        parsed_data.Laser = parsed_data.Laser[0:985] # Filtering out noise
+    modulus = ModulusProcess(parsed_data, test_num)
+
+    print(modulus)
 
     # print(parsed_data)
     print("Analysis Complete...")
     print("=========================================")
 
-    # PROCESSING DATA
+    # GRAPHING DATA
     ########################
 
     sensor = ['MTS', 'Laser', 'Strain Guage 1', 'Strain Guage 2']
     save = True
-    StrainGraph(parsed_data, test_num, sensor, save)
+    StrainGraph(parsed_data, test_num, sensor, modulus, save)
     print("=========================================")
 
     # print("Saving Data CSVs...")
