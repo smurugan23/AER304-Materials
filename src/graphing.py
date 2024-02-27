@@ -27,13 +27,15 @@ def StrainGraph(data: pd.DataFrame, test_num: np.int8, sensor: np.array, save: b
     save : bool
         save graphs or not
     '''
+    plot_ind = 600
+
     # finding plot limits:
-    max_strain = max(data[['MTS', 'Laser', 'Strain Guage 1', 'Strain Guage 2']].max(axis=1))
+    max_strain = max(data[['MTS', 'Laser', 'Strain Guage 1', 'Strain Guage 2']][0:plot_ind].max(axis=1))
     max_stress = max(data['MTS_stress'])
 
     for s in sensor:
         print(" Generating " + str(s) + " strain plot..")
-        plt.plot(data[s], data.MTS_stress, color = 'r')
+        plt.plot(data[s][0:plot_ind], data.MTS_stress[0:plot_ind], color = 'r')
         params = {'mathtext.default': 'regular' }          
         plt.rcParams.update(params)
         plt.rcParams.update({'font.size': 12})
@@ -42,9 +44,9 @@ def StrainGraph(data: pd.DataFrame, test_num: np.int8, sensor: np.array, save: b
         plt.ylabel('Stress (MPa)')
         # plt.legend([str(s) + ' Data - Material #' + str(test_num)])
         plt.grid()
-        if s not in ['Strain Guage 1', 'Strain Guage 2']:
-            plt.xlim((max_strain*-0.1,max_strain*1.1))
-            plt.ylim((max_stress*-0.1,max_stress*1.1))
+        # if s not in ['Strain Guage 1', 'Strain Guage 2']:
+        #     plt.xlim((max_strain*-0.1,max_strain*1.1))
+        #     plt.ylim((max_stress*-0.1,max_stress*1.1))
         if save:
             os.makedirs(f'results/Test_{test_num}-graphs/', exist_ok=True)
             plt.savefig(f'results/Test_{test_num}-graphs/{s}_strain.png')

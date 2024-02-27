@@ -55,9 +55,10 @@ for test_num in range(1,6):
     parsed_data.MTS_stress = parsed_data['MTS_F'] / (sample_dimensions['B' + str(test_num)]['width'] * sample_dimensions['B' + str(test_num)]['thickness'])
     parsed_data.Laser = ((parsed_data['Laser']-parsed_data['Laser'][0])/parsed_data['Laser'][0])
     parsed_data.MTS = -((parsed_data['MTS']-parsed_data['MTS'][0])/parsed_data['MTS'][0])
-    parsed_data['Strain Guage 1'] = -1 * parsed_data['Strain Guage 1'][0:800]
+    parsed_data['Strain Guage 1'] = -1 * parsed_data['Strain Guage 1'][0:800] # filtering out some 'post guage break' 
     parsed_data['Strain Guage 2'] =      parsed_data['Strain Guage 2'][0:800]
 
+    print(parsed_data[0:500])
     if test_num == 1:
         parsed_data.Laser = parsed_data.Laser[0:985] # Filtering out noise
 
