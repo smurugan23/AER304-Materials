@@ -16,8 +16,13 @@ for i in files:
 proceed = input("Proceed with renaming? (y/n): ")
 if proceed == "y":
     for i in files:
-        temp = i
-        os.rename(i, i.removesuffix("_0.tif") + ".tif")
+        print(i)
+        new = i.removesuffix(".tif")
+        new = new.removeprefix(path)
+        new = new.replace("-", "_")
+        new = path+new.removesuffix("_0") + ".tif"
+        print(new)
+        os.rename(i, new)
     print("Files renamed.")
 else:
     print("Operation cancelled.")
