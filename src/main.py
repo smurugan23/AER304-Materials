@@ -35,7 +35,7 @@ for test_num in range(1,6):
 
     print("=========================================")
     print("Loading Data for Sample #" + str(test_num) + "...")
-    print("=========================================")
+    # print("=========================================")
 
     # LOADING TEST DATA
     ##############################
@@ -43,7 +43,7 @@ for test_num in range(1,6):
 
 
     # Rename columns
-    raw_data = raw_data.rename(columns={'X_Value': 't', 'Untitled': 'MTS_F', 'Untitled 1': 'MTS', 'Untitled 2': 'Laser', 'Untitled 3': 'Strain Guage 1', 'Untitled 4': 'Strain Guage 2'})
+    parsed_data = raw_data.rename(columns={'X_Value': 't', 'Untitled': 'MTS_F', 'Untitled 1': 'MTS', 'Untitled 2': 'Laser', 'Untitled 3': 'Strain Guage 1', 'Untitled 4': 'Strain Guage 2', 'Untitled 5': 'MTS_stress'})
     
   
     # PROCESSING DATA
@@ -52,20 +52,26 @@ for test_num in range(1,6):
     print("Beginning Analysis...")
     print("=========================================")
 
-    stress = raw_data['MTS_F'] / (sample_dimensions['B' + str(test_num)]['width'] * sample_dimensions['B' + str(test_num)]['thickness'])
-    Laser_strain = (raw_data['Laser']-raw_data['Laser'][0])/raw_data['Laser'][0]
-    MTS_strain = (raw_data['MTS']-raw_data['MTS'][0])/raw_data['MTS'][0]
+    parsed_data.MTS_stress = parsed_data['MTS_F'] / (sample_dimensions['B' + str(test_num)]['width'] * sample_dimensions['B' + str(test_num)]['thickness'])
+    parsed_data.Laser = ((parsed_data['Laser']-parsed_data['Laser'][0])/parsed_data['Laser'][0])
+    parsed_data.MTS = -((parsed_data['MTS']-parsed_data['MTS'][0])/parsed_data['MTS'][0])
+    parsed_data['Strain Guage 1'] = -1 * parsed_data['Strain Guage 1'][0:800]
+    parsed_data['Strain Guage 2'] =      parsed_data['Strain Guage 2'][0:800]
 
+    if test_num == 1:
+        parsed_data.Laser = parsed_data.Laser[0:985] # Filtering out noise
+
+    # print(parsed_data)
     print("Analysis Complete...")
     print("=========================================")
-
 
     # PROCESSING DATA
     ########################
 
     sensor = ['MTS', 'Laser', 'Strain Guage 1', 'Strain Guage 2']
-    save = False
-    StrainGraph(raw_data, test_num, sensor, save)
+    save = True
+    StrainGraph(parsed_data, test_num, sensor, save)
+    print("=========================================")
 
     # print("Saving Data CSVs...")
     # Saving data raw data to CSV
