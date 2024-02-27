@@ -45,12 +45,14 @@ for test_num in range(1,6):
     # Rename columns
     raw_data = raw_data.rename(columns={'X_Value': 't', 'Untitled': 'MTS_F', 'Untitled 1': 'MTS', 'Untitled 2': 'Laser', 'Untitled 3': 'Strain Guage 1', 'Untitled 4': 'Strain Guage 2'})
     
+  
     # PROCESSING DATA
     ########################
     print("=========================================")
     print("Beginning Analysis...")
     print("=========================================")
 
+    stress = raw_data['MTS_F'] / (sample_dimensions['B' + str(test_num)]['width'] * sample_dimensions['B' + str(test_num)]['thickness'])
 
 
     print("Analysis Complete...")
