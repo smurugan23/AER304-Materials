@@ -12,7 +12,7 @@ import pandas as pd
 import os
 
 
-def StrainGraph(data: pd.DataFrame, test_num: np.int8, sensor: np.array):
+def StrainGraph(data: pd.DataFrame, test_num: np.int8, sensor: np.array, save: bool):
     '''
     PLots the strain graphs.
 
@@ -24,10 +24,12 @@ def StrainGraph(data: pd.DataFrame, test_num: np.int8, sensor: np.array):
         sample number
     sensor : np.array
         which sensors a plot must be made for
+    save : bool
+        save graphs or not
     '''
 
     for s in sensor:
-        print(" Saving " + str(s) + " strain plot..")
+        print(" Generating " + str(s) + " strain plot..")
         plt.plot(data.t, data[s], color = 'r')
         params = {'mathtext.default': 'regular' }          
         plt.rcParams.update(params)
@@ -37,7 +39,8 @@ def StrainGraph(data: pd.DataFrame, test_num: np.int8, sensor: np.array):
         plt.ylabel(str(s) + ' Strain (mm)')
         plt.legend([str(s) + ' Strain data'])
         plt.grid()
-        os.makedirs(f'results/Test_{test_num}-graphs/', exist_ok=True)
-        plt.savefig(f'results/Test_{test_num}-graphs/{s}_strain.png')
+        if save:
+            os.makedirs(f'results/Test_{test_num}-graphs/', exist_ok=True)
+            plt.savefig(f'results/Test_{test_num}-graphs/{s}_strain.png')
         # plt.show()
         plt.clf()

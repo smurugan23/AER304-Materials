@@ -25,7 +25,10 @@ for test_num in range(1,6):
     # for reading to pd df
     file_path = "Data\Labview Data\B" + str(test_num) + ".txt"
 
+    print("=========================================")
     print("Loading Data for Sample #" + str(test_num) + "...")
+    print("=========================================")
+
     # LOADING TEST DATA
     ##############################
     raw_data = pd.read_csv(file_path, skiprows=skip_rows, sep = '\t')
@@ -35,22 +38,23 @@ for test_num in range(1,6):
 
     # PROCESSING DATA
     ########################
-    print("=========================================")
-    print("Beginning Analysis...")
-    print("=========================================")
+    # print("=========================================")
+    # print("Beginning Analysis...")
+    # print("=========================================")
 
 
 
 
-    print("Analysis Complete...")
-    print("=========================================")
+    # print("Analysis Complete...")
+    # print("=========================================")
 
 
     # PROCESSING DATA
     ########################
 
     sensor = ['MTS', 'Laser', 'Strain Guage 1', 'Strain Guage 2']
-    StrainGraph(raw_data, test_num, sensor)
+    save = False
+    StrainGraph(raw_data, test_num, sensor, save)
 
     # print("Saving Data CSVs...")
     # Saving data raw data to CSV
