@@ -38,7 +38,7 @@ def StrainGraph(data: pd.DataFrame, test_num: np.int8, sensor: np.array, save: b
         plt.rcParams.update(params)
         plt.rcParams.update({'font.size': 12})
         plt.title(f'Material #{test_num}: {str(s)}, Stress vs Strain')
-        plt.xlabel(str(s) + ' Strain (mm)')
+        plt.xlabel(str(s) + ' Strain (mm/mm)')
         plt.ylabel('Stress (MPa)')
         # plt.legend([str(s) + ' Data - Material #' + str(test_num)])
         plt.grid()
