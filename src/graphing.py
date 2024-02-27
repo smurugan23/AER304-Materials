@@ -39,5 +39,5 @@ def StrainGraph(data: pd.DataFrame, test_num: np.int8, sensor: np.array):
         plt.grid()
         os.makedirs(f'results/Test_{test_num}-graphs/', exist_ok=True)
         plt.savefig(f'results/Test_{test_num}-graphs/{s}_strain.png')
-        plt.show()
+        # plt.show()
         plt.clf()
