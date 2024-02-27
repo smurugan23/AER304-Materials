@@ -19,6 +19,14 @@ from graphing import *
 
 skip_rows = 22
 
+sample_dimensions = { 'B1': {'width': 14.887, 'thickness': 3.203},
+                      'B2': {'width': 14.893, 'thickness': 3.177},
+                      'B3': {'width': 15.023, 'thickness': 3.143},
+                      'B4': {'width': 15.070, 'thickness': 3.373},
+                      'B5': {'width': 14.997, 'thickness': 3.300}}
+
+
+
 
 for test_num in range(1,6):
 
@@ -33,20 +41,20 @@ for test_num in range(1,6):
     ##############################
     raw_data = pd.read_csv(file_path, skiprows=skip_rows, sep = '\t')
 
+
     # Rename columns
     raw_data = raw_data.rename(columns={'X_Value': 't', 'Untitled': 'MTS_F', 'Untitled 1': 'MTS', 'Untitled 2': 'Laser', 'Untitled 3': 'Strain Guage 1', 'Untitled 4': 'Strain Guage 2'})
-
+    
     # PROCESSING DATA
     ########################
-    # print("=========================================")
-    # print("Beginning Analysis...")
-    # print("=========================================")
+    print("=========================================")
+    print("Beginning Analysis...")
+    print("=========================================")
 
 
 
-
-    # print("Analysis Complete...")
-    # print("=========================================")
+    print("Analysis Complete...")
+    print("=========================================")
 
 
     # PROCESSING DATA
