@@ -53,7 +53,8 @@ for test_num in range(1,6):
     print("=========================================")
 
     stress = raw_data['MTS_F'] / (sample_dimensions['B' + str(test_num)]['width'] * sample_dimensions['B' + str(test_num)]['thickness'])
-
+    Laser_strain = (raw_data['Laser']-raw_data['Laser'][0])/raw_data['Laser'][0]
+    MTS_strain = (raw_data['MTS']-raw_data['MTS'][0])/raw_data['MTS'][0]
 
     print("Analysis Complete...")
     print("=========================================")
