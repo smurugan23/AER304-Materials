@@ -12,7 +12,7 @@ import pandas as pd
 import os
 
 
-def StrainGraph(data: pd.DataFrame, test_num: np.int8, sensor: np.array, modulus : np.float64, save: bool):
+def StrainGraph(data: pd.DataFrame, test_num: np.int8, sensor: np.array, modulus : np.array, yield_strength : np.array, save: bool):
     '''
     PLots the strain graphs.
 
@@ -26,6 +26,8 @@ def StrainGraph(data: pd.DataFrame, test_num: np.int8, sensor: np.array, modulus
         which sensors a plot must be made for
     modulus : np.float64
         elastic modulus of that material
+    yield_strength : np.array
+        yield strenngth location and value for that sample
     save : bool
         save graphs or not
     '''
@@ -43,18 +45,21 @@ def StrainGraph(data: pd.DataFrame, test_num: np.int8, sensor: np.array, modulus
     for s in sensor:
         print(" Generating " + str(s) + " strain plot..")
         plt.plot(data[s][0:end_ind], data.MTS_stress[0:end_ind], color = 'r')
+        if s in ['Laser', 'Strain Guage 2']:
+            plt.scatter(yield_strength[0], yield_strength[1], s=50)
+            mod = modulus[0 if (s == 'Laser') else 1]
+            plt.legend([f'Young\'s Modulus = {round(mod, 2)} MPa)', f'Yield Stength = {round(yield_strength[1], 2)}'])
+
+
         params = {'mathtext.default': 'regular' }          
         plt.rcParams.update(params)
         plt.rcParams.update({'font.size': 12})
         plt.title(f'Material #{test_num}: {str(s)}, Stress vs Strain')
         plt.xlabel(str(s) + ' Strain (mm/mm)')
         plt.ylabel('Stress (MPa)')
-        
-        mod = modulus[0 if (s == 'Laser') else 1]
-        plt.legend([f'Young\'s Modulus = {round(mod, 2)} MPa)'])
 
         # x = np.linspace(0, 1, 100)
-        # y = x*mod
+        # y = x*mod - mod*0.002
         # plt.plot(x, y)
 
         plt.grid()

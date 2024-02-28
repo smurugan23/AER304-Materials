@@ -53,7 +53,9 @@ for test_num in range(1,6):
 
     modulus = ModulusProcess(parsed_data, test_num)
 
-    print(modulus)
+    yield_strength = YieldProcess(parsed_data, test_num, modulus)
+
+    print(yield_strength)
 
     # print(parsed_data)
     print("Analysis Complete...")
@@ -64,7 +66,7 @@ for test_num in range(1,6):
 
     sensor = ['MTS', 'Laser', 'Strain Guage 1', 'Strain Guage 2']
     save = True
-    StrainGraph(parsed_data, test_num, sensor, modulus, save)
+    StrainGraph(parsed_data, test_num, sensor, modulus, yield_strength, save)
     print("=========================================")
 
     # print("Saving Data CSVs...")
