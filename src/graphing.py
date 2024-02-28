@@ -29,10 +29,11 @@ def StrainGraph(data: pd.DataFrame, test_num: np.int8, sensor: np.array, modulus
     save : bool
         save graphs or not
     '''
-    # end_indices = [600, 70, 250, 550, 500]
-    
-    # end_ind = end_indices[test_num-1]
 
+    end_indices = [600, 70, 500, 550, 500]
+    
+    end_ind = end_indices[test_num-1]
+    
     end_ind = -1
 
     # finding plot limits:
@@ -48,12 +49,14 @@ def StrainGraph(data: pd.DataFrame, test_num: np.int8, sensor: np.array, modulus
         plt.title(f'Material #{test_num}: {str(s)}, Stress vs Strain')
         plt.xlabel(str(s) + ' Strain (mm/mm)')
         plt.ylabel('Stress (MPa)')
+        
+        mod = modulus[0 if (s == 'Laser') else 1]
+        plt.legend([f'Young\'s Modulus = {round(mod, 2)} MPa)'])
 
         # x = np.linspace(0, 1, 100)
-        # y = x*modulus
+        # y = x*mod
         # plt.plot(x, y)
 
-        plt.legend([f'Young\'s Modulus = {round(modulus, 2)} MPa)'])
         plt.grid()
         # if s not in ['Strain Guage 1', 'Strain Guage 2']:
         plt.xlim((max_strain*-0.1,max_strain*1.1))

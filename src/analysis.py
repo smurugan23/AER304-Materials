@@ -62,6 +62,38 @@ def ModulusProcess(data: pd.DataFrame, test_num: np.int8):
     modulus : np.int
         elastic modulus for that sample
     '''
+    end_indices = [600, 74, 300, 550, 500] # region within which each graph is linear, determined observationally
+    
+    end_ind = end_indices[test_num-1]
+
+    # print(data[['MTS_stress', 'Laser']][0:end_ind])
+
+    modulus = [0, 0]
+
+    modulus[0], intercept = np.polyfit(data['Laser'][30:end_ind], data.MTS_stress[30:end_ind], deg=1)
+    modulus[1], intercept = np.polyfit(data['Strain Guage 2'][0:end_ind], data.MTS_stress[0:end_ind], deg=1)
+
+    if test_num == 3:
+        modulus[0], intercept = np.polyfit(data['Laser'][0:end_ind], data.MTS_stress[0:end_ind], deg=1)    
+    
+    return modulus
+
+def YieldProcess(data: pd.DataFrame, test_num: np.int8, modulus: np.float64):
+    '''
+    Calculate the young's modulus of the sample.
+
+    Parameters:
+    -----------   
+    data : pd.DataFrame
+        data from sensors
+    test_num : np.int
+        sample number
+
+    Returns:
+    -----------   
+    modulus : np.int
+        elastic modulus for that sample
+    '''
     end_indices = [600, 70, 250, 550, 500] # region within which each graph is linear, determined observationally
     
     end_ind = end_indices[test_num-1]
