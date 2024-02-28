@@ -78,7 +78,7 @@ def ModulusProcess(data: pd.DataFrame, test_num: np.int8):
     
     return modulus
 
-def YieldProcess(data: pd.DataFrame, test_num: np.int8, modulus: np.float64):
+def YieldProcess(data: pd.DataFrame, test_num: np.int8, modulus: np.array):
     '''
     Calculate the young's modulus of the sample.
 
@@ -88,21 +88,38 @@ def YieldProcess(data: pd.DataFrame, test_num: np.int8, modulus: np.float64):
         data from sensors
     test_num : np.int
         sample number
+    modulus : np.array
+        elastic modulus of the sample
 
     Returns:
     -----------   
-    modulus : np.int
-        elastic modulus for that sample
+    yield_strength : np.array
+        yield strenngth location and value for that sample
     '''
-    end_indices = [600, 70, 250, 550, 500] # region within which each graph is linear, determined observationally
+    end_indices = [675, 200, 500, 625, 600] # region within which each graph is linear, determined observationally
     
     end_ind = end_indices[test_num-1]
 
-    # print(data[['MTS_stress', 'Laser']][0:end_ind])
+    mod = modulus[0 if (test_num == 3) else 1]
+    strain_guage = data['Strain Guage 2'][0:end_ind]
+    strain_laser = data['Laser'][0:end_ind]
+    stress_measured = data['MTS_stress'][0:end_ind]
+    stress_offset_guage = [x*mod - mod*0.002 for x in strain_guage]
+    stress_offset_laser = [x*mod - mod*0.002 for x in strain_laser]
 
     if test_num == 3:
-        modulus, intercept = np.polyfit(data['Laser'][0:end_ind], data.MTS_stress[0:end_ind], deg=1)
+        plt.plot(strain_laser, stress_measured)
+        plt.plot(strain_laser, stress_offset_laser)
+
+        diff = abs(stress_measured - stress_offset_laser)
+        intersect_ind = list(diff).index(min(diff))
+        yield_strength = [strain_laser[intersect_ind], stress_measured[intersect_ind]]
     else:
-        modulus, intercept = np.polyfit(data['Strain Guage 2'][0:end_ind], data.MTS_stress[0:end_ind], deg=1)
+        plt.plot(strain_guage, stress_measured)
+        plt.plot(strain_guage, stress_offset_guage)
+
+        diff = abs(stress_measured - stress_offset_guage)
+        intersect_ind = list(diff).index(min(diff))
+        yield_strength = [strain_guage[intersect_ind], stress_measured[intersect_ind]]
     
-    return modulus
+    return yield_strength
