@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import csv
 import pandas as pd
+import os
 
 # Custom Functions/libraies
 from graphing import *
@@ -69,5 +70,11 @@ for test_num in range(1,6):
     StrainGraph(parsed_data, test_num, sensor, modulus, yield_strength, save)
     print("=========================================")
 
-    # print("Saving Data CSVs...")
+    print("Saving Data CSVs...")
+    # SAVING DATA
+    ########################
+    parsed_data.to_csv("results\Data\B" + str(test_num) + "_parsed.csv", index=False)
+    print("=========================================")
+    print("Data Saved...")
+    print("=========================================")
     # Saving data raw data to CSV
