@@ -68,13 +68,16 @@ def ModulusProcess(data: pd.DataFrame, test_num: np.int8):
 
     # print(data[['MTS_stress', 'Laser']][0:end_ind])
 
-    modulus = [0, 0]
+    modulus = [0, 0, 0]
 
     modulus[0], intercept = np.polyfit(data['Laser'][30:end_ind], data.MTS_stress[30:end_ind], deg=1)
     modulus[1], intercept = np.polyfit(data['Strain Guage 2'][0:end_ind], data.MTS_stress[0:end_ind], deg=1)
+    modulus[2], intercept = np.polyfit(data['Strain Guage 1'][0:end_ind], data.MTS_stress[0:end_ind], deg=1) # transverse
 
     if test_num == 3:
         modulus[0], intercept = np.polyfit(data['Laser'][0:end_ind], data.MTS_stress[0:end_ind], deg=1)    
+        modulus[2], intercept = np.polyfit(data['Strain Guage 1'][0:end_ind], data.MTS_stress[0:end_ind], deg=1) # transverse
+
     
     return modulus
 
@@ -123,3 +126,37 @@ def YieldProcess(data: pd.DataFrame, test_num: np.int8, modulus: np.array):
         yield_strength = [strain_guage[intersect_ind], stress_measured[intersect_ind]]
     
     return yield_strength
+
+
+def UltimateProcess(data: pd.DataFrame, test_num: np.int8):
+    '''
+    Calculate the young's modulus of the sample.
+
+    Parameters:
+    -----------   
+    data : pd.DataFrame
+        data from sensors
+    test_num : np.int
+        sample number
+
+    Returns:
+    -----------   
+    ultimate_strength : np.array
+        ultimate strenngth location value for that sample
+    '''
+
+    end_indices = [700, 700, 700, 700, 700] # region within which each graph is linear, determined observationally
+    
+    end_ind = end_indices[test_num-1]
+
+    end_ind = -1; 
+
+    sensor = ['Laser', 'Strain Guage 2']
+
+    stress_measured = data['MTS_stress'][0:end_ind]
+    ultimate_strength = [data.Laser[list(stress_measured).index(max(stress_measured))] , max(stress_measured)]
+    
+    
+    return ultimate_strength
+
+    
