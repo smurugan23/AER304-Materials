@@ -2,7 +2,7 @@
 
 % Initializing information
 clear all
-images = [10,24; 4,5; 9,10; 11,23; 14,21]; % Images within linear elastic region
+images = [10,25; 4,5; 9,10; 11,23; 14,21]; % Images within linear elastic region
 image_info = ["test00001.csv", "test00002.csv", "test00003.csv", "test00001.csv", "test00005.csv"];
 cols = [148,275; 160,252; 171,276; 152,263; 140,245]; % x-axis range of intrest
 rows = [14, 257; 74,201; 75,228; 83,314; 78,233]; % y-axis range of intrest
@@ -54,11 +54,13 @@ for i = 1:5
         exx(j-images(i,1)+1) = average(strainsXX, cols(i,1):cols(i,2), rows(i,1):rows(i,2));
         exy(j-images(i,1)+1) = average(strainsXY, cols(i,1):cols(i,2), rows(i,1):rows(i,2));
         eyy(j-images(i,1)+1) = average(strainsYY, cols(i,1):cols(i,2), rows(i,1):rows(i,2));
+       
     end
-    
+     poisson = abs(exx(images(i,2)-images(i,1))/eyy(images(i,2)-images(i,1)));
 
-    E = youngsModules(stress, eyy, true);
+    E = youngsModules(stress, eyy, false);
     fprintf('Youngs Modulus for test %d: %f\n', i, E);
+    fprintf('Poisson Raito for test %d: %f\n', i, poisson);
     clear data stress_data image_data image_table t stressXX stressYY stressXY stress;
 end
 
