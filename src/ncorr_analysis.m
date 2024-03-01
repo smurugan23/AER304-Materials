@@ -1,11 +1,11 @@
 % Script dedicated to NCORR data analysis (Young's Modulus)
 
-% Initializing average areas for each specimen
+% Initializing information
 clear all
-images = [10,24; 7,8; 12,16; 11,23; 14,24];
+images = [10,24; 4,5; 9,10; 11,23; 14,21]; % Images within linear elastic region
 image_info = ["test00001.csv", "test00002.csv", "test00003.csv", "test00001.csv", "test00005.csv"];
-cols = [148,275; 160,252; 171,276; 152,263; 140,245];
-rows = [14, 257; 74,201; 75,228; 83,314; 78,233];
+cols = [148,275; 160,252; 171,276; 152,263; 140,245]; % x-axis range of intrest
+rows = [14, 257; 74,201; 75,228; 83,314; 78,233]; % y-axis range of intrest
 
 
 
@@ -17,9 +17,9 @@ for i = 1:5
     
     image_table = readtable(strcat('./Data/Image Data/',num2str(i),'/',image_info(i)), 'NumHeaderLines', 1);
     image_data = image_table{:, vartype("numeric")};
+
     % Extract the relevant stresses
     stress = [];
-
     for j = (images(i,1):images(i,2))
         for k = 1:length(image_data(:,1))
             if image_data(k,1) == j
@@ -45,7 +45,8 @@ for i = 1:5
     exx = zeros(1,images(i,2)-images(i,1));
     exy = zeros(1,images(i,2)-images(i,1));
     eyy = zeros(1,images(i,2)-images(i,1));
-
+    
+    % Average Srtrain Fields
     for j = images(i,1):images(i,2)
         strainsXX = (data.data_dic_save.strains(j).plot_exx_cur_formatted);
         strainsXY = (data.data_dic_save.strains(j).plot_exy_cur_formatted);
@@ -61,6 +62,7 @@ for i = 1:5
     clear data stress_data image_data image_table t stressXX stressYY stressXY stress;
 end
 
+% Find young's modulus
 function E = youngsModules(stress, strain, debug)
     LS=fit(strain',stress','poly1');
     if debug
@@ -73,6 +75,7 @@ function E = youngsModules(stress, strain, debug)
     E=LS.p1;
 end
 
+% Average data over specific rows and columns
 function avg = average(data, rows, cols)
     avg = 0;
     for i = rows
