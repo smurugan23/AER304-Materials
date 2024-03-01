@@ -57,16 +57,16 @@ def StrainGraph(data: pd.DataFrame, test_num: np.int8, sensor: np.array, modulus
         if s in ['Laser', 'Strain Guage 2', 'Strain Guage 1']:
             
             if s == 'Laser':
-                plt.scatter(ultimate_strength[0], ultimate_strength[1], s=50)
                 mod = modulus[0]
                 plt.scatter(yield_strength[0], yield_strength[1], s=50)
+                plt.scatter(ultimate_strength[0], ultimate_strength[1], s=50)
             elif s == 'Strain Guage 2':
                 mod = modulus[1]
                 plt.scatter(yield_strength[0], yield_strength[1], s=50)
             else:
                 mod = modulus[2]
             
-            plt.legend([f'Young\'s Modulus = {round(mod, 2)} MPa)', f'Yield Stength = {round(yield_strength[1], 2)}', f'Ultimate Stength = {round(ultimate_strength[1], 2)}'])
+            plt.legend([f'Young\'s Modulus = {round(mod, 2)} MPa', f'Yield Stength = {round(yield_strength[1], 2)} MPa', f'Ultimate Stength = {round(ultimate_strength[1], 2)} MPa'])
 
 
         params = {'mathtext.default': 'regular' }          
