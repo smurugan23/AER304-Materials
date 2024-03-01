@@ -10,7 +10,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import csv
 import pandas as pd
-import os
 
 # Custom Functions/libraies
 from graphing import *
@@ -55,8 +54,10 @@ for test_num in range(1,6):
     modulus = ModulusProcess(parsed_data, test_num)
 
     yield_strength = YieldProcess(parsed_data, test_num, modulus)
+    ultimate_strength = UltimateProcess(parsed_data, test_num)
 
-    print(yield_strength)
+    print("Poisson's Ratio:")
+    print(modulus[1]/modulus[2])
 
     # print(parsed_data)
     print("Analysis Complete...")
@@ -67,14 +68,13 @@ for test_num in range(1,6):
 
     sensor = ['MTS', 'Laser', 'Strain Guage 1', 'Strain Guage 2']
     save = True
-    StrainGraph(parsed_data, test_num, sensor, modulus, yield_strength, save)
+    StrainGraph(parsed_data, test_num, sensor, modulus, yield_strength, ultimate_strength, save)
     print("=========================================")
 
-    print("Saving Data CSVs...")
-    # SAVING DATA
-    ########################
-    parsed_data.to_csv("results\Data\B" + str(test_num) + "_parsed.csv", index=False)
-    print("=========================================")
-    print("Data Saved...")
-    print("=========================================")
+    # print("Saving Data CSVs...")
     # Saving data raw data to CSV
+
+    # find the ultimate yield 
+    # find poisson's ration
+
+    

@@ -12,7 +12,7 @@ import pandas as pd
 import os
 
 
-def StrainGraph(data: pd.DataFrame, test_num: np.int8, sensor: np.array, modulus : np.array, yield_strength : np.array, save: bool):
+def StrainGraph(data: pd.DataFrame, test_num: np.int8, sensor: np.array, modulus : np.array, yield_strength : np.array, ultimate_strength : np.array, save: bool):
     '''
     PLots the strain graphs.
 
@@ -28,6 +28,8 @@ def StrainGraph(data: pd.DataFrame, test_num: np.int8, sensor: np.array, modulus
         elastic modulus of that material
     yield_strength : np.array
         yield strenngth location and value for that sample
+    ultimate_strength : np.array
+        ultimate strenngth location value for that sample
     save : bool
         save graphs or not
     '''
@@ -44,11 +46,27 @@ def StrainGraph(data: pd.DataFrame, test_num: np.int8, sensor: np.array, modulus
 
     for s in sensor:
         print(" Generating " + str(s) + " strain plot..")
+
+        if s in ['Strain Guage 1', 'Strain Guage 2'] and test_num == 2:
+            end_ind = 500
+
         plt.plot(data[s][0:end_ind], data.MTS_stress[0:end_ind], color = 'r')
-        if s in ['Laser', 'Strain Guage 2']:
-            plt.scatter(yield_strength[0], yield_strength[1], s=50)
-            mod = modulus[0 if (s == 'Laser') else 1]
-            plt.legend([f'Young\'s Modulus = {round(mod, 2)} MPa', f'Yield Stength = {round(yield_strength[1], 2)} MPa'])
+
+        mod = 0
+        
+        if s in ['Laser', 'Strain Guage 2', 'Strain Guage 1']:
+            
+            if s == 'Laser':
+                plt.scatter(ultimate_strength[0], ultimate_strength[1], s=50)
+                mod = modulus[0]
+                plt.scatter(yield_strength[0], yield_strength[1], s=50)
+            elif s == 'Strain Guage 2':
+                mod = modulus[1]
+                plt.scatter(yield_strength[0], yield_strength[1], s=50)
+            else:
+                mod = modulus[2]
+            
+            plt.legend([f'Young\'s Modulus = {round(mod, 2)} MPa)', f'Yield Stength = {round(yield_strength[1], 2)}', f'Ultimate Stength = {round(ultimate_strength[1], 2)}'])
 
 
         params = {'mathtext.default': 'regular' }          
