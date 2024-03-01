@@ -1,6 +1,7 @@
 % Script dedicated to NCORR data analysis (Young's Modulus)
 
 % Initializing average areas for each specimen
+clear all
 images = [4,10; 4,15; 4,15; 4,15; 4,15];
 image_info = ["test00001.csv", "test00002.csv", "test00003.csv", "test00001.csv", "test00005.csv"];
 cols = [148,275; 160,252; 171,276; 147,15; 140,245];
@@ -17,7 +18,7 @@ for i = 1:5
     image_table = readtable(strcat('./Data/Image Data/',num2str(i),'/',image_info(i)), 'NumHeaderLines', 1);
     image_data = image_table{:, vartype("numeric")};
     % Extract the relevant stresses
-    stress = zeros();
+    stress = []
 
     for j = (images(i,1):images(i,2))
         for k = 1:length(image_data(:,1))
