@@ -110,20 +110,25 @@ def YieldProcess(data: pd.DataFrame, test_num: np.int8, modulus: np.array):
     stress_offset_guage = [x*mod - mod*0.002 for x in strain_guage]
     stress_offset_laser = [x*mod - mod*0.002 for x in strain_laser]
 
-    if test_num == 3:
-        plt.plot(strain_laser, stress_measured)
-        plt.plot(strain_laser, stress_offset_laser)
+    yield_strength_laser = [0,0]
+    yield_strength_guage = [0,0]
+    
+    # plt.plot(strain_laser, stress_measured)
+    # plt.plot(strain_laser, stress_offset_laser)
 
-        diff = abs(stress_measured - stress_offset_laser)
-        intersect_ind = list(diff).index(min(diff))
-        yield_strength = [strain_laser[intersect_ind], stress_measured[intersect_ind]]
-    else:
-        plt.plot(strain_guage, stress_measured)
-        plt.plot(strain_guage, stress_offset_guage)
+    diff = abs(stress_measured - stress_offset_laser)
+    intersect_ind = list(diff).index(min(diff))
+    yield_strength_laser = [strain_laser[intersect_ind], stress_measured[intersect_ind]]
+
+    if test_num != 3:
+        # plt.plot(strain_guage, stress_measured)
+        # plt.plot(strain_guage, stress_offset_guage)
 
         diff = abs(stress_measured - stress_offset_guage)
         intersect_ind = list(diff).index(min(diff))
-        yield_strength = [strain_guage[intersect_ind], stress_measured[intersect_ind]]
+        yield_strength_guage = [strain_guage[intersect_ind], stress_measured[intersect_ind]]
+    
+    yield_strength = [yield_strength_laser, yield_strength_guage]
     
     return yield_strength
 
