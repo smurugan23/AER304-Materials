@@ -2,10 +2,10 @@
 
 % Initializing average areas for each specimen
 clear all
-images = [10,27; 4,8; 12,16; 11,26; 4,15];
+images = [10,24; 7,8; 12,16; 11,23; 14,24];
 image_info = ["test00001.csv", "test00002.csv", "test00003.csv", "test00001.csv", "test00005.csv"];
-cols = [148,275; 160,252; 171,276; 147,15; 140,245];
-rows = [14, 257; 74,201; 75,228; 61,15; 78,233];
+cols = [148,275; 160,252; 171,276; 152,263; 140,245];
+rows = [14, 257; 74,201; 75,228; 83,314; 78,233];
 
 
 
@@ -42,35 +42,34 @@ for i = 1:5
 
     
     
-    exx = zeros(1,images(i,1)-images(i,2));
-    exy = zeros(1,images(i,1)-images(i,2));
-    eyy = zeros(1,images(i,1)-images(i,2));
+    exx = zeros(1,images(i,2)-images(i,1));
+    exy = zeros(1,images(i,2)-images(i,1));
+    eyy = zeros(1,images(i,2)-images(i,1));
 
     for j = images(i,1):images(i,2)
         strainsXX = (data.data_dic_save.strains(j).plot_exx_cur_formatted);
         strainsXY = (data.data_dic_save.strains(j).plot_exy_cur_formatted);
         strainsYY = (data.data_dic_save.strains(j).plot_eyy_cur_formatted);
-        exx(j) = average(strainsXX, cols(i,1):cols(i,2), rows(i,1):rows(i,2));
-        exy(j) = average(strainsXY, cols(i,1):cols(i,2), rows(i,1):rows(i,2));
-        eyy(j) = average(strainsYY, cols(i,1):cols(i,2), rows(i,1):rows(i,2));
+        exx(j-images(i,1)+1) = average(strainsXX, cols(i,1):cols(i,2), rows(i,1):rows(i,2));
+        exy(j-images(i,1)+1) = average(strainsXY, cols(i,1):cols(i,2), rows(i,1):rows(i,2));
+        eyy(j-images(i,1)+1) = average(strainsYY, cols(i,1):cols(i,2), rows(i,1):rows(i,2));
     end
     
 
-    E = youngsModules(stress, eyy);
+    E = youngsModules(stress, eyy, true);
     fprintf('Youngs Modulus for test %d: %f\n', i, E);
     clear data stress_data image_data image_table t stressXX stressYY stressXY stress;
 end
 
-function E = youngsModules(stress, strain)
-    idx=find(strain<=0.005,1,'last');
-    strain=strain(1:idx);
-    stress=stress(1:idx);
+function E = youngsModules(stress, strain, debug)
     LS=fit(strain',stress','poly1');
-    figure()
-    hold on
-    scatter(strain, stress)
-    plot(LS)
-    hold off
+    if debug
+        figure()
+        hold on
+        scatter(strain, stress)
+        plot(LS)
+        hold off
+    end
     E=LS.p1;
 end
 
