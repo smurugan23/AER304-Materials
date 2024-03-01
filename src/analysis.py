@@ -70,15 +70,15 @@ def ModulusProcess(data: pd.DataFrame, test_num: np.int8):
 
     modulus = [0, 0, 0]
 
-    modulus[0], intercept = np.polyfit(data['Laser'][30:end_ind], data.MTS_stress[30:end_ind], deg=1)
-    modulus[1], intercept = np.polyfit(data['Strain Guage 2'][0:end_ind], data.MTS_stress[0:end_ind], deg=1)
-    modulus[2], intercept = np.polyfit(data['Strain Guage 1'][0:end_ind], data.MTS_stress[0:end_ind], deg=1) # transverse
-
     if test_num == 3:
         modulus[0], intercept = np.polyfit(data['Laser'][0:end_ind], data.MTS_stress[0:end_ind], deg=1)    
         modulus[2], intercept = np.polyfit(data['Strain Guage 1'][0:end_ind], data.MTS_stress[0:end_ind], deg=1) # transverse
+    else:
+        modulus[0], intercept = np.polyfit(data['Laser'][30:end_ind], data.MTS_stress[30:end_ind], deg=1)
+        modulus[1], intercept = np.polyfit(data['Strain Guage 2'][0:end_ind], data.MTS_stress[0:end_ind], deg=1)
+        modulus[2], intercept = np.polyfit(data['Strain Guage 1'][0:end_ind], data.MTS_stress[0:end_ind], deg=1) # transverse
 
-    
+    # print(modulus)
     return modulus
 
 def YieldProcess(data: pd.DataFrame, test_num: np.int8, modulus: np.array):

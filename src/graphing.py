@@ -78,6 +78,7 @@ def StrainGraph(data: pd.DataFrame, test_num: np.int8, sensor: np.array, modulus
 
         # x = np.linspace(0, 1, 100)
         # y = x*mod - mod*0.002
+        # print(test_num)
         # plt.plot(x, y)
 
         plt.grid()
