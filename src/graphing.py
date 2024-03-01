@@ -41,20 +41,20 @@ def StrainGraph(data: pd.DataFrame, test_num: np.int8, sensor: np.array, modulus
     end_ind = -1
 
     # finding plot limits:
-    max_strain = max(data[[ 'Laser', 'Strain Guage 1', 'Strain Guage 2']][0:end_ind].max(axis=1))
+    max_strain = max(data[[ 'Laser', 'Strain Gauge 1', 'Strain Gauge 2']][0:end_ind].max(axis=1))
     max_stress = max(data['MTS_stress'])
 
     for s in sensor:
         print(" Generating " + str(s) + " strain plot..")
 
-        if s in ['Strain Guage 1', 'Strain Guage 2'] and test_num == 2:
+        if s in ['Strain Gauge 1', 'Strain Gauge 2'] and test_num == 2:
             end_ind = 500
 
         plt.plot(data[s][0:end_ind], data.MTS_stress[0:end_ind], color = 'r')
 
         mod = 0
         
-        if s in ['Laser', 'Strain Guage 2', 'Strain Guage 1']:
+        if s in ['Laser', 'Strain Gauge 2', 'Strain Gauge 1']:
             
             if s == 'Laser':
                 mod = modulus[0]
@@ -63,7 +63,7 @@ def StrainGraph(data: pd.DataFrame, test_num: np.int8, sensor: np.array, modulus
 
                 plt.legend([f'Young\'s Modulus = {round(mod, 3)} MPa', f'Yield Stength = {round(yield_strength[0][1], 3)} MPa', f'Ultimate Stength = {round(ultimate_strength[1], 3)} MPa'])
 
-            elif s == 'Strain Guage 2':
+            elif s == 'Strain Gauge 2':
                 mod = modulus[1]
                 plt.scatter(yield_strength[1][0], yield_strength[1][1], s=50)
 
@@ -90,11 +90,15 @@ def StrainGraph(data: pd.DataFrame, test_num: np.int8, sensor: np.array, modulus
         # plt.plot(x, y)
 
         plt.grid()
-        # if s not in ['Strain Guage 1', 'Strain Guage 2']:
+        # if s not in ['Strain Gauge 1', 'Strain Gauge 2']:
         plt.xlim((max_strain*-0.1,max_strain*1.1))
         plt.ylim((max_stress*-0.1,max_stress*1.1))
         if save:
             os.makedirs(f'results/Test_{test_num}-graphs/', exist_ok=True)
+            if s == 'Strain Gauge 1':
+                s = 'Strain Guage 1'
+            elif s == 'Strain Gauge 2':
+                s = 'Strain Guage 2'
             plt.savefig(f'results/Test_{test_num}-graphs/{s}_strain.png')
         # plt.show()
         plt.clf()

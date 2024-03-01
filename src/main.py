@@ -66,7 +66,7 @@ for test_num in range(1,6):
     # GRAPHING DATA
     ########################
 
-    sensor = ['MTS', 'Laser', 'Strain Guage 1', 'Strain Guage 2']
+    sensor = ['MTS', 'Laser', 'Strain Gauge 1', 'Strain Gauge 2']
     save = True
     StrainGraph(parsed_data, test_num, sensor, modulus, yield_strength, ultimate_strength, save)
     print("=========================================")
