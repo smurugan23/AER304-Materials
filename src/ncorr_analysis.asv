@@ -56,7 +56,6 @@ for i = 1:5
     end
     
 
-    scatter(eyy, stress)
     E = youngsModules(stress, eyy);
     fprintf('Youngs Modulus for test %d: %f\n', i, E);
     clear data stress_data image_data image_table t stressXX stressYY stressXY stress;
