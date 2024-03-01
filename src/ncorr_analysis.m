@@ -2,7 +2,7 @@
 
 % Initializing average areas for each specimen
 clear all
-images = [10,27; 4,8; 4,15; 4,15; 4,15];
+images = [10,27; 4,8; 12,16; 11,26; 4,15];
 image_info = ["test00001.csv", "test00002.csv", "test00003.csv", "test00001.csv", "test00005.csv"];
 cols = [148,275; 160,252; 171,276; 147,15; 140,245];
 rows = [14, 257; 74,201; 75,228; 61,15; 78,233];
